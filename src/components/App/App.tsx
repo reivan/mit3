@@ -1,6 +1,7 @@
 import { TodoApp } from '../TodoApp/TodoApp'
-import './App.css'
 
 export function App() {
-  return <TodoApp />
+  return <div className="pt-6 px-8">
+    <TodoApp />
+  </div>
 }

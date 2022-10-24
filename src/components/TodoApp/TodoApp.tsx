@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import './TodoApp.css'
 
 type TodoItem = {
   id: Number,
@@ -45,16 +44,17 @@ export function TodoApp() {
       <form onSubmit={addTodo}>
         <input
           type="text"
-          className="new-todo"
+          className="w-full h-10 px-2 mb-2 bg-stone-700 rounded"
           value={text}
           onChange={event => setText(event.target.value)}
+          placeholder="new todo..."
         />
       </form>
 
       <div>
         {list.map(item => (
           <div
-            className="todo-item"
+            className="py-2 select-none"
             key={item.id as React.Key}
             onDoubleClick={() => deleteTodo(item.id)}
           >
