@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 type TodoItem = {
-  id: Number,
-  title: String,
-}
+  id: Number;
+  title: String;
+};
 
 export function TodoApp() {
-  const [text, setText] = useState('')
-  const [list, setList] = useState<TodoItem[]>([])
+  const [text, setText] = useState('');
+  const [list, setList] = useState<TodoItem[]>([]);
 
   useEffect(() => {
     (async () => {
-      const todos = await storage.getTodos()
+      const todos = await storage.getTodos();
 
-      setList(todos)
-    })()
-  }, [])
+      setList(todos);
+    })();
+  }, []);
 
   function addTodo(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
     const newTodo = {
       id: new Date().getTime(),
       title: text,
-    }
+    };
 
-    const newList = [...list, newTodo]
-    setList(newList)
-    setText('')
+    const newList = [...list, newTodo];
+    setList(newList);
+    setText('');
 
-    storage.saveTodos(newList)
+    storage.saveTodos(newList);
   }
 
   function deleteTodo(id: Number) {
-    const newList = list.filter(todo => todo.id !== id)
-    setList(newList)
+    const newList = list.filter((todo) => todo.id !== id);
+    setList(newList);
 
-    storage.saveTodos(newList)
+    storage.saveTodos(newList);
   }
 
   return (
@@ -49,13 +49,13 @@ export function TodoApp() {
             focus:ring-2 focus:ring-slate-300
             transition duration-100"
           value={text}
-          onChange={event => setText(event.target.value)}
+          onChange={(event) => setText(event.target.value)}
           placeholder="new todo..."
         />
       </form>
 
       <div>
-        {list.map(item => (
+        {list.map((item) => (
           <div
             className="py-2 select-none"
             key={item.id as React.Key}
@@ -66,24 +66,24 @@ export function TodoApp() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 const storage = {
   getTodos: async () => {
-    let todos = []
+    let todos = [];
 
     try {
-      const savedState = localStorage.getItem('todos')
-      todos = JSON.parse(savedState || '[]')
+      const savedState = localStorage.getItem('todos');
+      todos = JSON.parse(savedState || '[]');
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
 
-    return todos
+    return todos;
   },
   saveTodos: async (todos: TodoItem[]) => {
-    const jsonTodos = JSON.stringify(todos)
-    localStorage.setItem('todos', jsonTodos)
-  }
-}
+    const jsonTodos = JSON.stringify(todos);
+    localStorage.setItem('todos', jsonTodos);
+  },
+};
