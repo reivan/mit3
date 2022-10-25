@@ -1,7 +1,7 @@
-export type TodoId = number | string;
+export type TTodoId = number | string;
 
-export type TodoItem = {
-  id: TodoId;
+export type TTodoItem = {
+  id: TTodoId;
   title: string;
   tags?: string[];
 };

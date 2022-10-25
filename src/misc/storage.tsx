@@ -1,7 +1,7 @@
-import { TodoItem } from './types';
+import { TTodoItem } from './types';
 
 export const storage = {
-  getTodos: async (): Promise<TodoItem[]> => {
+  getTodos: async (): Promise<TTodoItem[]> => {
     let todos = [];
 
     try {
@@ -13,7 +13,7 @@ export const storage = {
 
     return todos;
   },
-  saveTodos: async (todos: TodoItem[]) => {
+  saveTodos: async (todos: TTodoItem[]) => {
     const jsonTodos = JSON.stringify(todos);
     localStorage.setItem('todos', jsonTodos);
   },

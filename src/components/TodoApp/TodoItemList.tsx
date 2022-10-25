@@ -1,21 +1,26 @@
-import { TodoId, TodoItem } from '../../misc/types';
+import { TTodoId, TTodoItem } from '../../misc/types';
+import { TodoItem } from './TodoItem';
 
 interface ITodoItemList {
-  todoItems: TodoItem[];
-  deleteTodo: (id: TodoId) => void;
+  todoItems: TTodoItem[];
+  setTodoItemTags: (id: TTodoId, tags: string[]) => void;
+  deleteTodo: (id: TTodoId) => void;
 }
 
-export function TodoItemList({ todoItems, deleteTodo }: ITodoItemList) {
+export function TodoItemList({
+  todoItems,
+  setTodoItemTags,
+  deleteTodo,
+}: ITodoItemList) {
   return (
     <div>
       {todoItems.map((todoItem) => (
-        <div
-          className="py-2 select-none"
+        <TodoItem
           key={todoItem.id}
-          onDoubleClick={() => deleteTodo(todoItem.id)}
-        >
-          {todoItem.title}
-        </div>
+          todoItem={todoItem}
+          setTodoItemTags={setTodoItemTags}
+          deleteTodo={deleteTodo}
+        />
       ))}
     </div>
   );
