@@ -57,5 +57,11 @@ export function TagEditor({ tags, onSaveNewTags, onStopEditing }: ITagEditor) {
 
 const format = {
   stringify: (tags: string[]) => tags.join(' '),
-  parse: (text: string) => uniq(text.trim().split(/\s+/)),
+  parse: (text: string) => {
+    if (text === '') {
+      return [];
+    }
+
+    return uniq(text.trim().split(/\s+/));
+  },
 };
