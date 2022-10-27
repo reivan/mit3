@@ -34,7 +34,11 @@ export function TagEditor({ tags, onSaveNewTags, onStopEditing }: ITagEditor) {
         type="text"
         className="py-1 px-2 mb-4 rounded"
         value={text}
-        onChange={(event) => setText(event.target.value)}
+        onChange={(event) => {
+          // Microsoft SwiftKey Keyboard ignores autocapitalization settings
+          const lowerValue = event.target.value.toLocaleLowerCase();
+          setText(lowerValue);
+        }}
       />
 
       <div className="flex space-x-3">
