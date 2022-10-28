@@ -30,7 +30,7 @@ export function TodoApp() {
       tags,
     };
 
-    const newList = [...todos, newTodo];
+    const newList = [newTodo, ...todos];
     setTodos(newList);
 
     storage.saveTodos(newList);
