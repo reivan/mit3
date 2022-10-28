@@ -1,89 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { TTodoId, TTodoItem } from '../../misc/types';
+import { TodoItemList } from './TodoItemList';
+import { NewTodoFrom } from './NewTodoForm';
+import { TagList } from './TagList';
+import { storage } from '../../misc/storage';
+import { uniq } from '../../misc/utils';
 
-type TodoItem = {
-  id: Number;
-  title: String;
-};
+const untaggedTag = 'untagged';
 
 export function TodoApp() {
-  const [text, setText] = useState('');
-  const [list, setList] = useState<TodoItem[]>([]);
+  const [todos, setTodos] = useState<TTodoItem[]>([]);
+  const [selectedTag, setSelectedTag] = useState<null | string>(null);
 
   useEffect(() => {
     (async () => {
       const todos = await storage.getTodos();
 
-      setList(todos);
+      setTodos(todos);
     })();
   }, []);
 
-  function addTodo(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function addTodo(text: string) {
+    const tags =
+      selectedTag !== null && selectedTag !== untaggedTag ? [selectedTag] : [];
 
     const newTodo = {
       id: new Date().getTime(),
       title: text,
+      tags,
     };
 
-    const newList = [...list, newTodo];
-    setList(newList);
-    setText('');
+    const newList = [...todos, newTodo];
+    setTodos(newList);
 
     storage.saveTodos(newList);
   }
 
-  function deleteTodo(id: Number) {
-    const newList = list.filter((todo) => todo.id !== id);
-    setList(newList);
+  function deleteTodo(id: TTodoId) {
+    const newList = todos.filter((todo) => todo.id !== id);
+    setTodos(newList);
 
     storage.saveTodos(newList);
   }
+
+  function setTodoItemTags(id: TTodoId, tags: string[]) {
+    const newList = todos.map((todo) =>
+      todo.id === id ? { ...todo, tags } : todo
+    );
+    setTodos(newList);
+
+    storage.saveTodos(newList);
+  }
+
+  const tags = [untaggedTag, ...uniq(todos.flatMap((todo) => todo.tags ?? []))];
+
+  const filteredTodos = filterByTag(todos, selectedTag);
 
   return (
-    <div>
-      <form onSubmit={addTodo}>
-        <input
-          type="text"
-          className="w-full h-10 px-2 mb-2 bg-stone-700
-            rounded focus:outline-none
-            focus:ring-2 focus:ring-slate-300
-            transition duration-100"
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          placeholder="new todo..."
+    <>
+      <TagList
+        tags={tags}
+        selectedTag={selectedTag}
+        filterByTag={setSelectedTag}
+      />
+      <div className="px-8">
+        <NewTodoFrom addTodo={addTodo} />
+        <TodoItemList
+          setTodoItemTags={setTodoItemTags}
+          todoItems={filteredTodos}
+          deleteTodo={deleteTodo}
         />
-      </form>
-
-      <div>
-        {list.map((item) => (
-          <div
-            className="py-2 select-none"
-            key={item.id as React.Key}
-            onDoubleClick={() => deleteTodo(item.id)}
-          >
-            {item.title}
-          </div>
-        ))}
       </div>
-    </div>
+    </>
   );
 }
 
-const storage = {
-  getTodos: async () => {
-    let todos = [];
-
-    try {
-      const savedState = localStorage.getItem('todos');
-      todos = JSON.parse(savedState || '[]');
-    } catch (error) {
-      console.error(error);
-    }
-
+function filterByTag(todos: TTodoItem[], selectedTag: string | null) {
+  if (selectedTag === null) {
     return todos;
-  },
-  saveTodos: async (todos: TodoItem[]) => {
-    const jsonTodos = JSON.stringify(todos);
-    localStorage.setItem('todos', jsonTodos);
-  },
-};
+  }
+
+  if (selectedTag === untaggedTag) {
+    return todos.filter((todo) => {
+      const tagCount = todo.tags?.length ?? 0;
+      return tagCount === 0;
+    });
+  }
+
+  return todos.filter((todo) => todo.tags?.includes(selectedTag));
+}
