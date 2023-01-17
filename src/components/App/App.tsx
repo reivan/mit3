@@ -1,9 +1,9 @@
-import { TodoApp } from '../TodoApp/TodoApp';
+import { Router } from '../Router/Router';
 
 export function App() {
   return (
     <div className="pt-6">
-      <TodoApp />
+      <Router />
     </div>
   );
 }
