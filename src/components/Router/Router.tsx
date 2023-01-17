@@ -11,7 +11,7 @@ export function Router() {
 
   return (
     <>
-      <div className="px-8 text-right">
+      <div className="px-8 mb-2 text-right">
         <button
           onClick={() => setCurrentPage(PAGES.HOME)}
           className={`
