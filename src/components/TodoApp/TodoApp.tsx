@@ -1,19 +1,27 @@
 import { TodoItemList } from './TodoItemList';
 import { NewTodoFrom } from './NewTodoForm';
 import { TagList } from './TagList';
-import { useTodos } from './useTodos';
+import { TTodoId, TTodoItem } from '../../misc/types';
 
-export function TodoApp() {
-  const {
-    addTodo,
-    deleteTodo,
-    setTodoItemTags,
-    selectedTag,
-    setSelectedTag,
-    tags,
-    filteredTodos,
-  } = useTodos();
+interface ITodoApp {
+  addTodo: (text: string) => void;
+  deleteTodo: (id: TTodoId) => void;
+  setTodoItemTags: (id: TTodoId, tags: string[]) => void;
+  selectedTag: string | null;
+  setSelectedTag: (tag: string | null) => void;
+  tags: string[];
+  filteredTodos: TTodoItem[];
+}
 
+export function TodoApp({
+  addTodo,
+  deleteTodo,
+  setTodoItemTags,
+  selectedTag,
+  setSelectedTag,
+  tags,
+  filteredTodos,
+}: ITodoApp) {
   return (
     <>
       <TagList
