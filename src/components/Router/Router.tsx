@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Settings } from '../Settings/Settings';
 import { TodoApp } from '../TodoApp/TodoApp';
 import { useTodos } from '../TodoApp/useTodos';
 import { NavBar } from './NavBar';
@@ -8,10 +9,20 @@ export enum PAGES {
   SETTINGS,
 }
 
+/**
+ *
+ * + extract nav
+ * + move todos useState into a custom hook
+ * + move state upwart one level
+ * - make Settings page
+ */
+
 export function Router() {
   const [currentPage, setCurrentPage] = useState(PAGES.HOME);
 
   const {
+    todos,
+    setTodos,
     addTodo,
     deleteTodo,
     setTodoItemTags,
@@ -37,7 +48,9 @@ export function Router() {
         />
       )}
 
-      {currentPage === PAGES.SETTINGS && 'settings page'}
+      {currentPage === PAGES.SETTINGS && (
+        <Settings todos={todos} importTodos={setTodos} />
+      )}
     </>
   );
 }

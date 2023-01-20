@@ -54,6 +54,7 @@ export function useTodos() {
 
   return {
     todos,
+    setTodos,
     addTodo,
     deleteTodo,
     setTodoItemTags,
