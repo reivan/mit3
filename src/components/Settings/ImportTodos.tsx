@@ -48,7 +48,7 @@ export function ImportTodos({ onPressImport }: IImportTodos) {
             setUploadedTodos(null);
             setMessage('import success');
           }}
-          className="bg-red-600 rounded px-4 py-1"
+          className="bg-red-600 rounded px-4 py-1 block"
         >
           Import (length: {uploadedTodos.length})
         </button>
