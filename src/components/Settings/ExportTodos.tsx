@@ -1,15 +1,31 @@
+import { useEffect, useState } from 'react';
 import { TTodoItem } from '../../misc/types';
 
 export function ExportTodos({ todos = [] }: { todos: TTodoItem[] }) {
-  const todos64 = [todos] // converting to base64 JSON
-    .map((val) => JSON.stringify(val))
-    .map(btoa)[0];
-  const timestamp = new Date().toISOString().replaceAll(':', '_');
+  const [downloadURL, setDownloadURL] = useState('');
+  const [createdAt, setCreatedAt] = useState('');
+
+  useEffect(() => {
+    const blob = new Blob(
+      [JSON.stringify(todos)], // prettier-ignore
+      { type: 'application/json' }
+    );
+    const downloadURL = URL.createObjectURL(blob);
+
+    const datetime = new Date().toISOString().replaceAll(':', '_');
+
+    setDownloadURL(downloadURL);
+    setCreatedAt(datetime);
+
+    return () => {
+      URL.revokeObjectURL(downloadURL)
+    }
+  }, [todos]);
 
   return (
     <a
-      download={`todos_${timestamp}.json`}
-      href={`data:application/json;base64,${todos64}`}
+      download={`todos_${createdAt}.json`}
+      href={downloadURL}
       className="bg-lime-600 rounded px-4 py-1"
     >
       Export
