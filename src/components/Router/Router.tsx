@@ -22,7 +22,7 @@ export function Router() {
 
   const {
     todos,
-    setTodos,
+    importTodos,
     addTodo,
     deleteTodo,
     setTodoItemTags,
@@ -49,7 +49,7 @@ export function Router() {
       )}
 
       {currentPage === PAGES.SETTINGS && (
-        <Settings todos={todos} importTodos={setTodos} />
+        <Settings todos={todos} importTodos={importTodos} />
       )}
     </>
   );

@@ -52,9 +52,15 @@ export function useTodos() {
   const tags = [untaggedTag, ...uniq(todos.flatMap((todo) => todo.tags ?? []))];
   const filteredTodos = filterByTag(todos, selectedTag);
 
+  function importTodos(newTodos: TTodoItem[]) {
+    setTodos(newTodos);
+
+    storage.saveTodos(newTodos);
+  }
+
   return {
     todos,
-    setTodos,
+    importTodos,
     addTodo,
     deleteTodo,
     setTodoItemTags,
